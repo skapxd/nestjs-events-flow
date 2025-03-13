@@ -21,7 +21,7 @@ export class EventsService {
     };
 
     // Emit the event - ahora con autocompletado
-    this.eventsFlow.emit('user.created', eventPayload);
+    // this.eventsFlow.emit('user.created', eventPayload);
 
     return userId;
   }
@@ -44,7 +44,7 @@ export class EventsService {
     // await this.eventsFlow.emitAsync('email.sent', emailEvent);
 
     // Para emisión normal (no necesita esperar las respuestas)
-    this.eventsFlow.emit('email.sent', emailEvent);
+    // this.eventsFlow.emit('email.sent', emailEvent);
   }
 
   onEmailSent(payload: EmailSentEvent): void {

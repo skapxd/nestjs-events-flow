@@ -1,21 +1,20 @@
-import { DynamicModule, Global, Module, Provider, Type } from "@nestjs/common";
-import { ModuleRef } from "@nestjs/core";
+import { DynamicModule, Global, Module } from "@nestjs/common";
 import { EventEmitterModule } from "@nestjs/event-emitter";
 import { EventEmitterModuleOptions } from "@nestjs/event-emitter/dist/interfaces";
 import { EventsFlowService } from "./services/events-flow.service";
 
 /**
  * Módulo principal para nestjs-events-flow.
- * 
+ *
  * IMPORTANTE: Para evitar problemas de inyección de dependencias, esta librería ahora
  * recomienda dos formas de uso:
- * 
+ *
  * Opción 1 (Recomendada): Usar EventEmitterModule y EventsFlowService por separado
  * ```typescript
  * import { Module } from "@nestjs/common";
  * import { EventEmitterModule } from "@nestjs/event-emitter";
  * import { EventsFlowService } from "nestjs-events-flow";
- * 
+ *
  * @Module({
  *   imports: [
  *     EventEmitterModule.forRoot({
@@ -28,13 +27,13 @@ import { EventsFlowService } from "./services/events-flow.service";
  * })
  * export class AppModule {}
  * ```
- * 
+ *
  * Opción 2: Usar EventsFlowGlobalModule después de EventEmitterModule
  * ```typescript
  * import { Module } from "@nestjs/common";
  * import { EventEmitterModule } from "@nestjs/event-emitter";
  * import { EventsFlowGlobalModule } from "nestjs-events-flow";
- * 
+ *
  * @Module({
  *   imports: [
  *     EventEmitterModule.forRoot({...}),
@@ -46,11 +45,10 @@ import { EventsFlowService } from "./services/events-flow.service";
  */
 @Module({
   providers: [EventsFlowService],
-  exports: [EventsFlowService]
+  exports: [EventsFlowService],
 })
 export class EventsFlowModule {
   static forRoot(options?: EventEmitterModuleOptions): DynamicModule {
-    
     return {
       global: options?.global || false,
       module: EventsFlowModule,
@@ -60,14 +58,3 @@ export class EventsFlowModule {
     };
   }
 }
-
-/**
- * Módulo global que proporciona el servicio EventsFlowService.
- * Debe usarse DESPUÉS de importar EventEmitterModule.
- */
-@Global()
-@Module({
-  providers: [EventsFlowService],
-  exports: [EventsFlowService]
-})
-export class EventsFlowGlobalModule {}

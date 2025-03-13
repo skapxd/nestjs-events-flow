@@ -1,9 +1,5 @@
 import { Module } from '@nestjs/common';
-import {
-  EventsFlowGlobalModule,
-  EventsFlowModule,
-  EventsFlowService,
-} from 'nestjs-events-flow';
+import { EventsFlowModule, EventsFlowService } from 'nestjs-events-flow';
 import { EventsModule } from './events/events.module';
 
 @Module({
@@ -14,7 +10,6 @@ import { EventsModule } from './events/events.module';
       global: true,
       verboseMemoryLeak: true,
     }),
-    EventsFlowGlobalModule,
     EventsModule,
   ],
   providers: [EventsFlowService],
