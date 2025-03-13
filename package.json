@@ -1,6 +1,6 @@
 {
   "name": "nestjs-events-flow",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A NestJS decorators package for events documentation and visualization",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
