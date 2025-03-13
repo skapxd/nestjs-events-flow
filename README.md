@@ -147,3 +147,6 @@ Para ver el diagrama, simplemente abre el archivo `public/events-flow.html` en t
 ## Licencia
 
 MIT
+
+
+[![Reproducible Build](https://img.shields.io/badge/Reproducible-Build-brightgreen)](https://reproducible-builds.org)
