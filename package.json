@@ -46,7 +46,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/skapxd/nestjs-events-flow"
+    "url": "git+https://github.com/skapxd/nestjs-events-flow.git"
   },
   "dependencies": {
     "rxjs": "7.8.2"

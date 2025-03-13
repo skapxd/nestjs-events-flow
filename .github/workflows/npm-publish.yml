@@ -7,10 +7,11 @@ on:
     paths-ignore:
       - '**.md'
 
-# Permisos necesarios para poder hacer push
+# Permisos necesarios para poder hacer push y generar provenance
 permissions:
   contents: write
   packages: write
+  id-token: write  # Necesario para la generación de provenance
 
 jobs:
   publish:
