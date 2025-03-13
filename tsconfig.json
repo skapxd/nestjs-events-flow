@@ -10,6 +10,11 @@
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
+    "paths": {
+      "#/*": [
+        "*"
+      ]
+    },
     "incremental": true,
     "skipLibCheck": true,
     "strict": true,
@@ -18,6 +23,6 @@
     "newLine": "lf",
     "stripInternal": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "listen-types.d.ts"],
   "exclude": ["node_modules", "dist"]
 }

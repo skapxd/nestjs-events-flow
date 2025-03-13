@@ -58,22 +58,30 @@ Para más detalles, consulta el [README del proyecto de ejemplo](./sample/README
 
 ## Uso básico
 
-### 1. Configurar el módulo EventEmitter en tu aplicación
+### 1. Configurar los módulos necesarios
+
+Hay dos formas recomendadas de usar esta biblioteca:
+
+#### Opción 1: Mantener EventEmitterModule y agregar EventsFlowGlobalModule
 
 ```typescript
 import { Module } from "@nestjs/common";
 import { EventEmitterModule } from "@nestjs/event-emitter";
+import { EventsFlowGlobalModule } from "nestjs-events-flow";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 
 @Module({
   imports: [
+    // 1. Configura EventEmitterModule normalmente
     EventEmitterModule.forRoot({
       delimiter: ".",
       wildcard: true,
       global: true,
       verboseMemoryLeak: true,
     }),
+    // 2. Añade EventsFlowGlobalModule para habilitar autocompletado en toda la app
+    EventsFlowGlobalModule,
   ],
   controllers: [AppController],
   providers: [AppService],
@@ -81,33 +89,68 @@ import { AppService } from "./app.service";
 export class AppModule {}
 ```
 
-### 2. Usar los decoradores en tus controladores o servicios
+#### Opción 2: Proporcionar EventsFlowService en el módulo que lo necesita
+
+```typescript
+import { Module } from "@nestjs/common";
+import { EventEmitterModule } from "@nestjs/event-emitter";
+import { EventsFlowService } from "nestjs-events-flow";
+import { AppController } from "./app.controller";
+import { AppService } from "./app.service";
+
+@Module({
+  imports: [
+    EventEmitterModule.forRoot({...}),
+  ],
+  controllers: [AppController],
+  providers: [
+    AppService,
+    // Proporcionar EventsFlowService directamente en el módulo
+    EventsFlowService,
+  ],
+  // Exportarlo si es necesario en otros módulos
+  exports: [EventsFlowService],
+})
+export class AppModule {}
+```
+
+> **Importante**: EventsFlowService debe usarse *después* de configurar EventEmitterModule, ya que depende de su funcionalidad.
+
+### 2. Usar los decoradores y servicios en tus controladores
 
 ```typescript
 import { Controller, Get } from "@nestjs/common";
-import { EventEmitter2 } from "@nestjs/event-emitter";
-import { Events } from "nestjs-events-flow";
+import { EventsFlowService, Events, OnEvent } from "nestjs-events-flow";
 
 @Controller()
 export class AppController {
-  constructor(private readonly eventEmitter: EventEmitter2) {}
+  // Usar EventsFlowService para obtener autocompletado de eventos
+  constructor(private readonly eventService: EventsFlowService) {}
 
   @Get()
   @Events({
     emit: ["user.created"],
   })
   async createUser() {
-    // Lógica para crear usuario
-    await this.eventEmitter.emit("user.created", { id: 1, name: "John" });
+    // Ahora tendrás autocompletado en emit
+    await this.eventService.emit("user.created", { id: 1, name: "John" });
     return { success: true };
   }
 
-  @Events({
-    listen: ["user.created"],
-  })
+  // Usar OnEvent con autocompletado
+  @OnEvent("user.created")
   async handleUserCreated(data: any) {
     console.log("User created:", data);
     // Lógica para manejar el evento
+  }
+
+  // También puedes usar el decorador Events para múltiples eventos
+  @Events({
+    listen: ["user.created", "user.updated"],
+  })
+  async handleUserEvents(data: any) {
+    console.log("User event:", data);
+    // Lógica para manejar múltiples eventos
   }
 }
 ```

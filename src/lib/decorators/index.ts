@@ -1,9 +1,12 @@
 import { SetMetadata } from '@nestjs/common';
-import { OnEvent } from '@nestjs/event-emitter';
+import { OnEvent as NestOnEvent } from '@nestjs/event-emitter';
 
-import { listenTypes } from '../types/listen-types';
+import { listenTypes } from '../../../listen-types';
 
 export const EMITS_EVENTS_KEY = 'emits_events';
+
+// Re-exportar el decorador personalizado OnEvent
+export { OnEvent } from './on-event.decorator';
 
 /**
  * Decorador para documentar los eventos que un método de un controlador puede emitir.
@@ -58,7 +61,7 @@ export const Events = (options: EventsOptions = {}): MethodDecorator => {
     // Si se definen eventos a escuchar, utiliza el decorador OnEvent de @nestjs/event-emitter
     if (metadataValue.listen.length > 0) {
       metadataValue.listen.forEach((eventName) => {
-        OnEvent(eventName, { async: true, promisify: true })(
+        NestOnEvent(eventName, { async: true, promisify: true })(
           target,
           propertyKey,
           descriptor,

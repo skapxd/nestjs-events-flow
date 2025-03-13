@@ -3,7 +3,7 @@
   "version": "0.1.4",
   "description": "A NestJS decorators package for events documentation and visualization",
   "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "types": ["dist/index.d.ts", "listen-types.d.ts"],
   "scripts": {
     "build": "SOURCE_DATE_EPOCH=${SOURCE_DATE_EPOCH:-$(git log -1 --pretty=%ct)} tsc",
     "prepublishOnly": "npm run build",
@@ -42,7 +42,8 @@
   "files": [
     "dist/**/*",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "listen-types.d.ts"
   ],
   "repository": {
     "type": "git",

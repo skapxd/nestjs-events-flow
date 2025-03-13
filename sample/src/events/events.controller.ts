@@ -1,6 +1,6 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { EventsService } from './events.service';
-import { Events } from 'nestjs-events-flow';
+import { Events, OnEvent } from 'nestjs-events-flow';
 import { BodyDto } from './dto';
 import { EmailSentEvent, UserCreatedEvent } from 'src/types';
 
@@ -33,19 +33,26 @@ export class EventsController {
 
   /**
    * Listens for email.sent event and logs it
+   * Usando el decorador OnEvent con autocompletado
    */
-  @Events({
-    emit: [],
-    listen: ['email.sent'],
-  })
+  @OnEvent('email.sent')
   onEmailSent(payload: EmailSentEvent) {
     return this.service.onEmailSent(payload);
   }
 
-  @Events({
-    listen: ['**'],
-  })
+  /**
+   * Ejemplo de uso del decorador OnEvent con el comodín global
+   */
+  @OnEvent('**')
   onAllEvents(payload: unknown) {
     return this.service.onAllEvents(payload);
+  }
+
+  /**
+   * Método adicional para demostrar el comodín para eventos de email
+   */
+  @OnEvent('email.*')
+  onAllEmailEvents(payload: unknown) {
+    console.log('Se detectó un evento relacionado con email:', payload);
   }
 }
