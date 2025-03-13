@@ -39,7 +39,7 @@ jobs:
           echo "TZ=UTC" >> $GITHUB_ENV
           echo "LANG=C.UTF-8" >> $GITHUB_ENV
           echo "LC_ALL=C.UTF-8" >> $GITHUB_ENV
-          echo "PATH=/usr/bin:/bin" >> $GITHUB_ENV
+          # Don't override PATH to ensure yarn/npm are available
           
       - name: Update version
         id: update_version
