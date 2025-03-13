@@ -49,17 +49,14 @@ import { EventsFlowService } from "./services/events-flow.service";
   exports: [EventsFlowService]
 })
 export class EventsFlowModule {
-  /**
-   * @deprecated Usar EventEmitterModule.forRoot() y agregar EventsFlowService como proveedor
-   */
   static forRoot(options?: EventEmitterModuleOptions): DynamicModule {
-    console.warn('DEPRECATION WARNING: EventsFlowModule.forRoot() está obsoleto. Usa EventEmitterModule.forRoot() y provee EventsFlowService en tu módulo principal.');
     
     return {
       global: options?.global || false,
       module: EventsFlowModule,
       providers: [EventsFlowService],
       exports: [EventsFlowService],
+      imports: [EventEmitterModule.forRoot(options)],
     };
   }
 }

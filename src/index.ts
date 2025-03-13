@@ -5,8 +5,6 @@ export {
   EventsOptions,
   EMITS_EVENTS_KEY,
   EVENTS_METADATA_KEY,
-  // Nuevo decorador tipado
-  OnEvent,
 } from './lib/decorators/index';
 
 // Exportar módulos

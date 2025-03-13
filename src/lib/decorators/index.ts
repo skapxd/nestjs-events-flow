@@ -5,9 +5,6 @@ import { listenTypes } from '../../../listen-types';
 
 export const EMITS_EVENTS_KEY = 'emits_events';
 
-// Re-exportar el decorador personalizado OnEvent
-export { OnEvent } from './on-event.decorator';
-
 /**
  * Decorador para documentar los eventos que un método de un controlador puede emitir.
  * @param events Array de strings representando los nombres de los eventos.
