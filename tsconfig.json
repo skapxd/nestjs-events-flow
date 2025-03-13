@@ -15,6 +15,9 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
+    "newLine": "lf",
+    "stripInternal": true,
+    "deterministic": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]

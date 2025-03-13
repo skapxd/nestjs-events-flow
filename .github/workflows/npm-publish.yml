@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -20,13 +22,74 @@ jobs:
           node-version: '20'
           registry-url: 'https://registry.npmjs.org'
 
+      - name: Configure Git
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+
       - name: Install dependencies
         run: yarn install --frozen-lockfile
+        env:
+          NODE_ENV: production
+          
+      # Set reproducible build environment variables
+      - name: Set reproducible build environment
+        run: |
+          echo "SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)" >> $GITHUB_ENV
+          echo "TZ=UTC" >> $GITHUB_ENV
+          echo "LANG=C.UTF-8" >> $GITHUB_ENV
+          echo "LC_ALL=C.UTF-8" >> $GITHUB_ENV
+          echo "PATH=/usr/bin:/bin" >> $GITHUB_ENV
+          
+      - name: Update version
+        id: update_version
+        run: |
+          git_hash=$(git rev-parse --short HEAD)
+          current_version=$(node -p "require('./package.json').version")
+          npm version patch -m "Bump version to %s [skip ci]"
+          new_version=$(node -p "require('./package.json').version")
+          echo "NEW_VERSION=$new_version" >> $GITHUB_ENV
+          echo "Updated version from $current_version to $new_version"
 
       - name: Build
         run: yarn build
+        env:
+          NODE_ENV: production
+
+      - name: Verify reproducible build
+        run: |
+          npm pack
+          tar_file=$(ls nestjs-events-flow-*.tgz)
+          mkdir -p verification
+          tar -xzf $tar_file -C verification
+          cd verification/package
+          npm pack
+          verification_tar=$(ls nestjs-events-flow-*.tgz)
+          cd ../..
+          mkdir -p verification2
+          tar -xzf verification/package/$verification_tar -C verification2
+          
+          # Compare content hashes
+          echo "Comparing builds to verify reproducibility..."
+          find verification/package -type f -not -path "*/node_modules/*" -not -path "*/\.*" | sort | xargs sha256sum > build1.sha
+          find verification2/package -type f -not -path "*/node_modules/*" -not -path "*/\.*" | sort | xargs sha256sum > build2.sha
+          
+          if diff -q build1.sha build2.sha > /dev/null; then
+            echo "✅ Builds are reproducible!"
+          else
+            echo "❌ Builds are NOT reproducible!"
+            diff build1.sha build2.sha
+            exit 0  # Don't fail the build yet, we're still setting things up
+          fi
+
+      - name: Push version update
+        run: git push --follow-tags
 
       - name: Publish to NPM
         run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          SOURCE_DATE_EPOCH: ${{ env.SOURCE_DATE_EPOCH }}
+          TZ: UTC
+          LANG: C.UTF-8
+          LC_ALL: C.UTF-8

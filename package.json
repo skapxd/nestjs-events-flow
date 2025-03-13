@@ -5,12 +5,16 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc",
+    "build": "SOURCE_DATE_EPOCH=${SOURCE_DATE_EPOCH:-$(git log -1 --pretty=%ct)} tsc",
     "prepublishOnly": "npm run build",
     "update": "npx npm-check-updates -i --format group",
     "link": "yarn link",
     "unlink": "yarn unlink",
-    "dev": "tsc --watch"
+    "dev": "tsc --watch",
+    "verify-reproducible": "npm pack && mkdir -p verification && tar -xzf nestjs-events-flow-*.tgz -C verification && cd verification/package && npm pack"
+  },
+  "publishConfig": {
+    "provenance": true
   },
   "keywords": [
     "nestjs",
