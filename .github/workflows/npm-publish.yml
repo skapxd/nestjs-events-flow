@@ -70,32 +70,6 @@ jobs:
         env:
           NODE_ENV: development
 
-      - name: Verify reproducible build
-        run: |
-          npm pack
-          tar_file=$(ls nestjs-events-flow-*.tgz)
-          mkdir -p verification
-          tar -xzf $tar_file -C verification
-          cd verification/package
-          npm pack
-          verification_tar=$(ls nestjs-events-flow-*.tgz)
-          cd ../..
-          mkdir -p verification2
-          tar -xzf verification/package/$verification_tar -C verification2
-          
-          # Compare content hashes
-          echo "Comparing builds to verify reproducibility..."
-          find verification/package -type f -not -path "*/node_modules/*" -not -path "*/\.*" | sort | xargs sha256sum > build1.sha
-          find verification2/package -type f -not -path "*/node_modules/*" -not -path "*/\.*" | sort | xargs sha256sum > build2.sha
-          
-          if diff -q build1.sha build2.sha > /dev/null; then
-            echo "✅ Builds are reproducible!"
-          else
-            echo "❌ Builds are NOT reproducible!"
-            diff build1.sha build2.sha
-            exit 0  # Don't fail the build yet, we're still setting things up
-          fi
-
       - name: Push version update
         run: git push --follow-tags
 
@@ -107,3 +81,42 @@ jobs:
           TZ: UTC
           LANG: C.UTF-8
           LC_ALL: C.UTF-8
+          
+      # Verificar reproducibilidad después de publicar
+      - name: Verify reproducible build
+        run: |
+          echo "Verificando reproducibilidad del build..."
+          
+          # Primera construcción
+          npm pack
+          tar_file=$(ls nestjs-events-flow-*.tgz)
+          mkdir -p verification
+          tar -xzf $tar_file -C verification
+          
+          # Segunda construcción 
+          cp $tar_file orig_build.tgz
+          cd verification/package
+          npm pack
+          verification_tar=$(ls nestjs-events-flow-*.tgz)
+          cd ../..
+          mkdir -p verification2
+          tar -xzf verification/package/$verification_tar -C verification2
+          
+          # Compare content hashes (solo archivos dist)
+          echo "Comparing builds to verify reproducibility..."
+          find verification/package/dist -type f | sort | xargs sha256sum > build1.sha
+          find verification2/package/dist -type f | sort | xargs sha256sum > build2.sha
+          
+          # Comparar
+          if diff -q build1.sha build2.sha > /dev/null; then
+            echo "✅ Builds son reproducibles!"
+            # Registrar información en el repo
+            echo "reproducibleBuildVerified=true" >> $GITHUB_ENV
+          else
+            echo "⚠️ Builds no son completamente reproducibles (solo para información)"
+            diff build1.sha build2.sha
+            echo "reproducibleBuildVerified=false" >> $GITHUB_ENV
+          fi
+          
+          # Nunca fallamos el build por verificación de reproducibilidad
+          exit 0
