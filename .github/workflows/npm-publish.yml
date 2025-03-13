@@ -26,6 +26,8 @@ jobs:
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
+          # Permitir que GitHub Actions pueda hacer push
+          git config --global --add safe.directory "${GITHUB_WORKSPACE}"
 
       - name: Install dependencies
         run: |
@@ -50,6 +52,14 @@ jobs:
         run: |
           git_hash=$(git rev-parse --short HEAD)
           current_version=$(node -p "require('./package.json').version")
+          
+          # Comprobar si hay cambios y commit todos los cambios pendientes
+          if [[ -n "$(git status --porcelain)" ]]; then
+            git add .
+            git commit -m "chore: Update dependencies and configuration [skip ci]"
+          fi
+          
+          # Luego incrementar la versión
           npm version patch -m "Bump version to %s [skip ci]"
           new_version=$(node -p "require('./package.json').version")
           echo "NEW_VERSION=$new_version" >> $GITHUB_ENV
