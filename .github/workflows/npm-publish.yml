@@ -7,6 +7,11 @@ on:
     paths-ignore:
       - '**.md'
 
+# Permisos necesarios para poder hacer push
+permissions:
+  contents: write
+  packages: write
+
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -15,6 +20,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -71,7 +77,10 @@ jobs:
           NODE_ENV: development
 
       - name: Push version update
-        run: git push --follow-tags
+        run: |
+          # Configurar URL remota con token para tener permisos
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+          git push --follow-tags
 
       - name: Publish to NPM
         run: npm publish
