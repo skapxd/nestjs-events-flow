@@ -1,0 +1,49 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Events Documentation",
+    "version": "1.0.0"
+  },
+  "eventMappings": {
+    "EventsController.createUser": {
+      "emit": [
+        "user.created"
+      ],
+      "listen": []
+    },
+    "EventsController.onUserCreated": {
+      "emit": [
+        "email.sent"
+      ],
+      "listen": [
+        "user.created"
+      ]
+    },
+    "EventsController.onEmailSent": {
+      "emit": [],
+      "listen": [
+        "email.sent"
+      ]
+    },
+    "EventsController.onAllEvents": {
+      "emit": [],
+      "listen": [
+        "**"
+      ]
+    }
+  },
+  "events": {
+    "user.created": {
+      "description": "Event \"user.created\" emitted by EventsController.createUser",
+      "emitters": [
+        "EventsController.createUser"
+      ]
+    },
+    "email.sent": {
+      "description": "Event \"email.sent\" emitted by EventsController.onUserCreated",
+      "emitters": [
+        "EventsController.onUserCreated"
+      ]
+    }
+  }
+}

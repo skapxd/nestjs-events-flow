@@ -1,0 +1,50 @@
+{
+  "name": "nestjs-events-flow",
+  "version": "0.1.0",
+  "description": "A NestJS decorators package for events documentation and visualization",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build",
+    "update": "npx npm-check-updates -i --format group",
+    "link": "yarn link",
+    "unlink": "yarn unlink",
+    "dev": "tsc --watch"
+  },
+  "keywords": [
+    "nestjs",
+    "events",
+    "decorators",
+    "documentation",
+    "flow"
+  ],
+  "author": "",
+  "license": "MIT",
+  "peerDependencies": {
+    "@nestjs/common": "^9.0.0 || ^10.0.0 || ^11.0.0",
+    "@nestjs/core": "^9.0.0 || ^10.0.0 || ^11.0.0",
+    "@nestjs/event-emitter": "^2.0.0",
+    "reflect-metadata": "^0.1.13"
+  },
+  "devDependencies": {
+    "@nestjs/common": "11.0.11",
+    "@nestjs/core": "11.0.11",
+    "@nestjs/event-emitter": "3.0.1",
+    "@types/node": "22.13.10",
+    "reflect-metadata": "0.2.2",
+    "typescript": "5.8.2"
+  },
+  "files": [
+    "dist/**/*",
+    "README.md",
+    "LICENSE"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/nestjs-events-flow"
+  },
+  "dependencies": {
+    "rxjs": "7.8.2"
+  }
+}
