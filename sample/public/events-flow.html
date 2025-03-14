@@ -18,6 +18,10 @@
   <div class="mermaid">
 graph LR;
 EventsController.createUser -- user.created-->EventsController.onUserCreated;
+EventsController.createUser -- user.created-->EventsController.onAllEvents;
+EventsController.onUserCreated -- email.sent-->EventsController.onEmailSent;
+EventsController.onUserCreated -- email.sent-->EventsController.onAllEvents;
+EventsController.onUserCreated -- email.sent-->EventsController.onAllEmailEvents;
   </div>
 </body>
 </html>

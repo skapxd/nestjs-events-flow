@@ -8,7 +8,7 @@ export {
 } from './lib/decorators/index';
 
 // Exportar módulos
-export { EventsFlowModule, EventsFlowGlobalModule } from './lib/events-flow.module';
+export { EventsFlowModule } from './lib/events-flow.module';
 
 // Exportar servicios
 export { EventsFlowService } from './lib/services/events-flow.service';

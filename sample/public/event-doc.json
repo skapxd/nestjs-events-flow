@@ -18,6 +18,24 @@
       "listen": [
         "user.created"
       ]
+    },
+    "EventsController.onEmailSent": {
+      "emit": [],
+      "listen": [
+        "email.sent"
+      ]
+    },
+    "EventsController.onAllEvents": {
+      "emit": [],
+      "listen": [
+        "**"
+      ]
+    },
+    "EventsController.onAllEmailEvents": {
+      "emit": [],
+      "listen": [
+        "email.*"
+      ]
     }
   },
   "events": {

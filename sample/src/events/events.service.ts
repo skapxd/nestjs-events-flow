@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { EventsFlowService } from 'nestjs-events-flow';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { UserCreatedEvent, EmailSentEvent } from 'src/types';
 
 @Injectable()
@@ -7,7 +7,7 @@ export class EventsService {
   private readonly logger = new Logger(EventsService.name);
 
   // Usar EventsFlowService para obtener autocompletado
-  constructor(private readonly eventsFlow: EventsFlowService) {}
+  constructor(private readonly eventsFlow: EventEmitter2) {}
 
   createUser(username: string, email: string): number {
     // Simulating user creation
@@ -21,7 +21,7 @@ export class EventsService {
     };
 
     // Emit the event - ahora con autocompletado
-    // this.eventsFlow.emit('user.created', eventPayload);
+    this.eventsFlow.emit('user.created', eventPayload);
 
     return userId;
   }
@@ -41,7 +41,7 @@ export class EventsService {
     };
 
     // Si necesitas esperar las respuestas del evento, usa emitAsync
-    // await this.eventsFlow.emitAsync('email.sent', emailEvent);
+    await this.eventsFlow.emitAsync('email.sent', emailEvent);
 
     // Para emisión normal (no necesita esperar las respuestas)
     // this.eventsFlow.emit('email.sent', emailEvent);
@@ -58,12 +58,5 @@ export class EventsService {
 
   onAllEvents(payload: unknown) {
     this.logger.log(payload);
-  }
-
-  // Método para demostrar acceso al emitter nativo si es necesario
-  useNativeEmitter() {
-    // Puedes acceder al EventEmitter2 nativo si lo necesitas
-    const nativeEmitter = this.eventsFlow.nativeEmitter;
-    // ...hacer algo con el emitter nativo
   }
 }

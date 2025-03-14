@@ -25,7 +25,7 @@ export class EventsController {
    */
   @Events({
     emit: ['email.sent'],
-    // listen: ['user.created'],
+    listen: ['user.created'],
   })
   onUserCreated(payload: UserCreatedEvent) {
     return this.service.onUserCreated(payload);
@@ -35,7 +35,7 @@ export class EventsController {
    * Listens for email.sent event and logs it
    * Usando el decorador OnEvent con autocompletado
    */
-  // @Events({ listen: ['email.sent'] })
+  @Events({ listen: ['email.sent'] })
   onEmailSent(payload: EmailSentEvent) {
     return this.service.onEmailSent(payload);
   }
@@ -51,7 +51,7 @@ export class EventsController {
   /**
    * Método adicional para demostrar el comodín para eventos de email
    */
-  // @Events({ listen: ['email.*'] })
+  @Events({ listen: ['email.*'] })
   onAllEmailEvents(payload: unknown) {
     console.log('Se detectó un evento relacionado con email:', payload);
   }

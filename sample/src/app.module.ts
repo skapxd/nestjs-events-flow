@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
-import { EventsFlowModule, EventsFlowService } from 'nestjs-events-flow';
+import { EventsFlowService } from 'nestjs-events-flow';
 import { EventsModule } from './events/events.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
-    EventsFlowModule.forRoot({
+    EventEmitterModule.forRoot({
       delimiter: '.',
       wildcard: true,
       global: true,
