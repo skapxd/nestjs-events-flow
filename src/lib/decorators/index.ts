@@ -58,7 +58,7 @@ export const Events = (options: EventsOptions = {}): MethodDecorator => {
     // Si se definen eventos a escuchar, utiliza el decorador OnEvent de @nestjs/event-emitter
     if (metadataValue.listen.length > 0) {
       metadataValue.listen.forEach((eventName) => {
-        NestOnEvent(eventName, { async: true, promisify: true })(
+        NestOnEvent(eventName, { async: true, promisify: true, suppressErrors: true })(
           target,
           propertyKey,
           descriptor,
