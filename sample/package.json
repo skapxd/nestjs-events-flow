@@ -29,7 +29,8 @@
     "@nestjs/swagger": "11.0.6",
     "nestjs-events-flow": "file:../",
     "reflect-metadata": "0.2.2",
-    "rxjs": "7.8.1"
+    "rxjs": "7.8.1",
+    "unplugin-swc": "1.5.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "3.2.0",
@@ -38,7 +39,7 @@
     "@nestjs/schematics": "11.0.0",
     "@nestjs/testing": "11.0.1",
     "@swc/cli": "0.6.0",
-    "@swc/core": "1.10.7",
+    "@swc/core": "1.11.9",
     "@types/express": "5.0.0",
     "@types/jest": "29.5.14",
     "@types/node": "22.10.7",

@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { EventEmitter2 } from '@nestjs/event-emitter';
+import { TrackedEventEmitter } from 'nestjs-events-flow/dist';
 import { UserCreatedEvent, EmailSentEvent } from 'src/types';
 
 @Injectable()
@@ -7,7 +7,7 @@ export class EventsService {
   private readonly logger = new Logger(EventsService.name);
 
   // Usar EventsFlowService para obtener autocompletado
-  constructor(private readonly eventsFlow: EventEmitter2) {}
+  constructor(private readonly eventsFlow: TrackedEventEmitter) {}
 
   createUser(username: string, email: string): number {
     // Simulating user creation

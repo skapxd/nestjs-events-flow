@@ -2,7 +2,7 @@ import { Body, Controller, Post } from '@nestjs/common';
 import { EventsService } from './events.service';
 import { Events } from 'nestjs-events-flow';
 import { BodyDto } from './dto';
-import { EmailSentEvent, UserCreatedEvent } from 'src/types';
+import type { EmailSentEvent, UserCreatedEvent } from '../types';
 
 @Controller('user')
 export class EventsController {
